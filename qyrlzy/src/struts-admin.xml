@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<package name="admin" extends="json-default" namespace="/admin">
+	  	<action name="Login*" class="com.nkl.admin.action.LoginAction" method="{1}">
+	  		<result name="error">login1.jsp</result>
+	  		<result name="success" type="redirect">index.jsp</result>
+	  		<result name="logout" type="redirect">login1.jsp</result>	  		
+	  		<result name="addSuccess">success.jsp</result>
+	  		<result name="regsuccess" type="json">
+	  			<param name="ignoreHierarchy">false</param>
+            	<param name="includeProperties">
+					success,data.*
+				</param>
+            </result>
+            <result name="regerror" type="json">
+            	<param name="ignoreHierarchy">false</param>
+			    <param name="includeProperties">
+					success,err.*
+				</param>
+			</result>
+	  	</action>	  	
+	  	<!--进行管理员权限的管理-->
+	  	<action name="manager_*" class="com.nkl.admin.action.ManagersAction" method="{1}">
+	  	<result name="managersShow">managersShow.jsp</result>
+	  	<result name="addManager">addManager.jsp</result>
+	  	<result name="updateManager">updateManager.jsp</result>
+	  	<result name="infoTip">infoTip.jsp</result>
+	  	</action>
+	  	
+	  	
+	  	
+	  	<action name="uploads" class="com.nkl.admin.action.UploadAction" >	  	
+            <!-- 指定（限制）上传文件的类型，定义局部拦截器，修改默认拦截器的属性 
+                "fileUpload.maximumSize" ：限制上传最大的文件大小。 
+                "fileUpload.allowedTypes"：允许上传文件的类型。 
+                "fileUpload.allowedExtensions"：允许上传文件的可扩展文件类型。 -->
+            <interceptor-ref name="defaultStack">
+                <param name="fileUpload.maximumSize">500000000</param>
+               <!--  <param name="fileUpload.allowedTypes">text/plain,application/vnd.ms-powerpoint</param>-->              
+                <param name="fileUpload.allowedExtensions">.bmp,.gif,.png,.jpeg,.jpg,.docx,.doc,.pot,.txt,.xlsx,.ppt,.pdf,.xls,.pps,.dps,.et,.wps,.rtf,.vsd</param>
+            </interceptor-ref>
+            
+            <result name="success">uploadSuccess.jsp</result>
+            <!-- 出现错误自动会返回input结果，进入结果视图 -->
+            <result name="error" >uploadError.jsp</result>
+	  	</action>
+	  	
+	  	<action name="sendTextMail" class="com.nkl.admin.action.SendTextAction" >
+	  	 <result name="success">uploadSuccess.jsp</result>
+            <!-- 出现错误自动会返回input结果，进入结果视图 -->
+            <result name="input" >uploadError.jsp</result>
+		
+	  	</action>
+	  	
+	  	
+	  	<action name="Admin_*" class="com.nkl.admin.action.AdminAction" method="{1}">
+	  		<result name="loginTip" type="redirect">loginTip.jsp</result>
+	  		<result name="error">error.jsp</result>
+	  		<result name="infoTip">infoTip.jsp</result>
+	  		<result name="userInfo" type="redirect">modifyInfo.jsp</result>
+	  		<result name="userPwd1" type="redirect">modifyPwd2.jsp</result>
+	  		<result name="userPwd2" type="redirect">modifyPwd2.jsp</result>
+	  		<result name="modifyPwd2">modifyPwd2.jsp</result>
+	  		<result name="departShow">departShow.jsp</result>
+	  		<result name="departEdit">departEdit.jsp</result>
+	  		<result name="userShow">userShow1.jsp</result>
+	  		<result name="userEdit">userEdit.jsp</result>
+	  		<result name="userShow2">userShow2.jsp</result>
+	  		<result name="userEdit2">userEdit2.jsp</result>
+	  		<result name="salaryShow">salaryShow.jsp</result>
+	  		<result name="salaryEdit">salaryEdit.jsp</result>
+	  		<result name="toachShow">toachShow.jsp</result>
+	  		<result name="toachEdit">toachEdit.jsp</result>
+	  		<result name="toachDetail">toachDetail.jsp</result>
+	  		<result name="awardShow">awardShow.jsp</result>
+	  		<result name="awardEdit">awardEdit.jsp</result>
+	  		<result name="awardDetail">awardDetail.jsp</result>
+	  		<result name="directShow">directShow.jsp</result>
+	  		<result name="directEdit">directEdit.jsp</result>
+	  		<result name="fileUpload">fileUpload.jsp</result> 
+	  		<result name="sendEmail">sendEmail.jsp</result>
+	  		<result name="tongji">tongji.jsp</result>                       
+            <!-- 导出部门excel -->
+            <result name="excel" type="stream">
+            <param name="contentType">application/vnd.ms-excel</param>    <!-- 注意这里的ContentType -->
+            <param name="inputName">excelStream</param>                   <!-- 这里需要和Action里的变量名一致 -->
+            <param name="contentDisposition">filename="download.xls"</param> <!-- 下载文件的名字 -->
+            <param name="bufferSize">10240</param>  <!-- 下载文件的大小 10485760=10M -->
+            </result>
+             <!-- 导出工资excel -->
+            <result name="salaryExcel" type="stream">
+            <param name="contentType">application/vnd.ms-excel</param>    <!-- 注意这里的ContentType -->
+            <param name="inputName">excelStream</param>                   <!-- 这里需要和Action里的变量名一致 -->
+            <param name="contentDisposition">filename="salarys.xls"</param> <!-- 下载文件的名字 -->
+            <param name="bufferSize">10240</param>  <!-- 下载文件的大小 10485760=10M -->
+            </result>
+            
+               <!-- 导出奖惩信息excel -->
+            <result name="awardExcel" type="stream">
+            <param name="contentType">application/vnd.ms-excel</param>    <!-- 注意这里的ContentType -->
+            <param name="inputName">excelStream</param>                   <!-- 这里需要和Action里的变量名一致 -->
+            <param name="contentDisposition">filename="awards.xls"</param> <!-- 下载文件的名字 -->
+            <param name="bufferSize">10240</param>  <!-- 下载文件的大小 10485760=10M -->
+            </result>
+            <!-- 员工转正 -->
+            <result name="zhuanzheng1">zhuanzheng1.jsp</result> 
+            <result name="zhuanzheng2">zhuanzheng2.jsp</result> 
+            <result name="zhuanzheng3">zhuanzheng3.jsp</result> 
+            <result name="zhuanzheng4">zhuanzheng4.jsp</result>
+            <result name="zhuanzheng5">zhuanzheng5.jsp</result>  
+	  	</action>
+	  	
+	</package>
+	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
+</struts>    
